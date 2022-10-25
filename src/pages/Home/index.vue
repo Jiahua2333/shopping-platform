@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <!-- 三级联动全局组件 -->
-    <TypeNav/>
-     <ListContainer/>
-     <Recommend/>
-     <Rank/>
-     <Like/>
-     <Floor/>
-     <Floor/>
-     <Brand/>
-  </div>
+    <div>
+        <!-- 三级联动全局组件 -->
+        <TypeNav />
+        <ListContainer />
+        <Recommend />
+        <Rank />
+        <Like />
+        <Floor />
+        <Floor />
+        <Brand />
+    </div>
 </template>
 
 <script>
@@ -22,18 +22,16 @@ import Floor from "@/pages/Home/Floor";
 import Brand from "@/pages/Home/Brand";
 
 export default {
-    name:'Home',
-    components:{
-      ListContainer,
-      Recommend,
-      Rank,
-      Like,
-      Floor,
-      Brand,
-    }
-}
+    name: "Home",
+    components: {
+        ListContainer,
+        Recommend,
+        Rank,
+        Like,
+        Floor,
+        Brand,
+    },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

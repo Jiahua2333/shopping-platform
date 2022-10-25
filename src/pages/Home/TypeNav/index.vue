@@ -15,7 +15,7 @@
             </nav>
             <div class="sort">
                 <div class="all-sort-list2">
-                    <div class="item bo">
+                    <div class="item">
                         <h3>
                             <a href="">图书、音像、数字商品</a>
                         </h3>
