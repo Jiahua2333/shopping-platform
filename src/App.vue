@@ -18,5 +18,10 @@
         components: {
             Header,Footer,
         },
+        mounted(){
+            // console.log(this.$store);
+            //派发一个action||获取商品分类的三级列表的数据
+            this.$store.dispatch('aboutHome/getCategoryList');
+        }
     };
 </script>
