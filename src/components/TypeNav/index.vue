@@ -2,22 +2,34 @@
     <!-- 商品分类导航 -->
     <div class="type-nav">
         <div class="container">
-            <div                                 @mouseleave="leaveIndex">
+            <div @mouseleave="leaveIndex">
                 <h2 class="all">全部商品分类</h2>
                 <div class="sort">
-                    <div class="all-sort-list2">
+                    <div class="all-sort-list2" @click.prevent="goSearch">
                         <div
                             class="item"
-                            v-for="(c1,index) in categoryList"
+                            v-for="(c1, index) in categoryList"
                             :key="c1.categoryId"
                         >
-                            <h3 
+                            <h3
                                 @mouseenter="changeIndex(index)"
-                                :class="{cur: currIndex===index}"
+                                :class="{ cur: currIndex === index }"
                             >
-                                <a href="">{{ c1.categoryName }}</a>
+                                <a
+                                    :categoryName="c1.categoryName"
+                                    :category1Id="c1.categoryId"
+                                    href=""
+                                >
+                                    {{ c1.categoryName }}</a
+                                >
                             </h3>
-                            <div class="item-list clearfix" :style="{display: currIndex === index ? 'block' : 'none'}">
+                            <div
+                                class="item-list clearfix"
+                                :style="{
+                                    display:
+                                        currIndex === index ? 'block' : 'none',
+                                }"
+                            >
                                 <div class="subitem">
                                     <dl
                                         class="fore"
@@ -25,16 +37,28 @@
                                         :key="c2.categoryId"
                                     >
                                         <dt>
-                                            <a href="">{{ c2.categoryName }}</a>
+                                            <a
+                                                :categoryName="c2.categoryName"
+                                                :category2Id="c2.categoryId"
+                                                href=""
+                                            >
+                                                {{ c2.categoryName }}</a
+                                            >
                                         </dt>
                                         <dd>
                                             <em
                                                 v-for="c3 in c2.categoryChild"
                                                 :key="c3.categoryId"
                                             >
-                                                <a href="">{{
-                                                    c3.categoryName
-                                                }}</a>
+                                                <a
+                                                    :categoryName="
+                                                        c3.categoryName
+                                                    "
+                                                    :category3Id="c3.categoryId"
+                                                    href=""
+                                                >
+                                                    {{ c3.categoryName }}</a
+                                                >
                                             </em>
                                         </dd>
                                     </dl>
@@ -59,25 +83,57 @@
 </template>
 
 <script>
+//按需引入：只是引入节流函数，其他的函数没有引入（模块），这样做的好处是，当你打包项目的时候体积会小一些
+import throttle from "lodash/throttle";
 import { mapState } from "vuex";
 export default {
     name: "TypeNav",
-    data(){
-        return{
+    data() {
+        return {
             //用于标识当前鼠标在那个类别
             currIndex: -1,
             //让subitem显示
             show: true,
         };
     },
-    methods:{
-        changeIndex(index){
+    methods: {
+        //throttle节流函数，在一段时间n（50毫秒），回调函数只执行一次
+        //debounce防抖函数，用户在一段时间内多次触发回调函数，只有最后一次能执行，之前的都会去除
+        changeIndex: throttle(function (index) {
             this.currIndex = index;
             // console.log(this.currIndex);
-        },
-        leaveIndex(){
+        }, 50),
+        leaveIndex() {
             this.currIndex = -1;
-        }
+        },
+        //路由跳转，可以用声明式方法<route-link></route-link>，但时由于此类时组件，在数量多的时候，占用内存会很大
+        //goSeach可以绑定在每个item的a标签里，但是数量多的时候，会造成许多个goSeach回调函数，占用内存也比较大
+        //把gosearch绑定在包含所有a标签的标签里，实现事件委托
+        /**
+         * 实现事件委托要解决的问题：
+         * 1.如何区分a标签
+         * 2.找到a标签，但如何区分一级，二级，三级分类
+         */
+        goSearch(event) {
+            //event.target:获取到的是出发事件的元素(div、h3、a、em、dt、dl)
+            const {categoryName, category1Id,category2Id,category3Id} = event.target.attributes;
+            // console.log(event.target.attributes);
+            // console.log(categoryName, category1Id,category2Id,category3Id);
+
+            //第二个问题解决了：点击的到底是不是a标签（只要这个标签身上带有categoryname）一定是a标签
+            if(categoryName){
+                const location = {name:'search'};
+                const query = {categoryName:categoryName.value};
+                if(category1Id) query.category1Id = category1Id.value;
+                else if(category2Id) query.category2Id = category2Id.value;
+                else query.category3Id = category3Id.value;
+
+                // console.log(query);
+                location.query = query;
+                // console.log(location);
+                this.$router.push(location);
+            }
+        },
     },
     computed: {
         ...mapState("aboutHome", ["categoryList"]),
@@ -143,7 +199,7 @@ export default {
                         //     background-color:aqua;
                         // }
                         &.cur {
-                            background-color:skyblue;
+                            background-color: skyblue;
                         }
 
                         a {
