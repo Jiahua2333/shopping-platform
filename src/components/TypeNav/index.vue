@@ -2,7 +2,48 @@
     <!-- 商品分类导航 -->
     <div class="type-nav">
         <div class="container">
-            <h2 class="all">全部商品分类</h2>
+            <div                                 @mouseleave="leaveIndex">
+                <h2 class="all">全部商品分类</h2>
+                <div class="sort">
+                    <div class="all-sort-list2">
+                        <div
+                            class="item"
+                            v-for="(c1,index) in categoryList"
+                            :key="c1.categoryId"
+                        >
+                            <h3 
+                                @mouseenter="changeIndex(index)"
+                                :class="{cur: currIndex===index}"
+                            >
+                                <a href="">{{ c1.categoryName }}</a>
+                            </h3>
+                            <div class="item-list clearfix" :style="{display: currIndex === index ? 'block' : 'none'}">
+                                <div class="subitem">
+                                    <dl
+                                        class="fore"
+                                        v-for="c2 in c1.categoryChild"
+                                        :key="c2.categoryId"
+                                    >
+                                        <dt>
+                                            <a href="">{{ c2.categoryName }}</a>
+                                        </dt>
+                                        <dd>
+                                            <em
+                                                v-for="c3 in c2.categoryChild"
+                                                :key="c3.categoryId"
+                                            >
+                                                <a href="">{{
+                                                    c3.categoryName
+                                                }}</a>
+                                            </em>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <nav class="nav">
                 <a href="###">服装城</a>
                 <a href="###">美妆馆</a>
@@ -13,55 +54,37 @@
                 <a href="###">有趣</a>
                 <a href="###">秒杀</a>
             </nav>
-            <div class="sort">
-                <div class="all-sort-list2">
-                    <div 
-                        class="item" 
-                        v-for="(c1) in categoryList"
-                        :key="c1.categoryId"
-                    >
-                        <h3>
-                            <a href="">{{c1.categoryName}}</a>
-                        </h3>
-                        <div class="item-list clearfix">
-                            <div class="subitem">
-                                <dl 
-                                    class="fore"
-                                    v-for="(c2) in c1.categoryChild"
-                                    :key="c2.categoryId"
-                                >
-                                    <dt>
-                                        <a href="">{{ c2.categoryName }}</a>
-                                    </dt>
-                                    <dd >
-                                        <em
-                                            v-for="(c3) in c2.categoryChild"
-                                            :key="c3.categoryId"
-                                        >
-                                            <a href="">{{ c3.categoryName }}</a>
-                                        </em>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 export default {
     name: "TypeNav",
-    computed:{
-        ...mapState('aboutHome',['categoryList']),
+    data(){
+        return{
+            //用于标识当前鼠标在那个类别
+            currIndex: -1,
+            //让subitem显示
+            show: true,
+        };
     },
-    mounted(){
+    methods:{
+        changeIndex(index){
+            this.currIndex = index;
+            // console.log(this.currIndex);
+        },
+        leaveIndex(){
+            this.currIndex = -1;
+        }
+    },
+    computed: {
+        ...mapState("aboutHome", ["categoryList"]),
+    },
+    mounted() {
         // console.log(this.categoryList);
-    }
+    },
 };
 </script>
 
@@ -115,6 +138,13 @@ export default {
                         overflow: hidden;
                         padding: 0 20px;
                         margin: 0;
+
+                        // &:hover{
+                        //     background-color:aqua;
+                        // }
+                        &.cur {
+                            background-color:skyblue;
+                        }
 
                         a {
                             color: #333;
@@ -175,11 +205,11 @@ export default {
                         }
                     }
 
-                    &:hover {
-                        .item-list {
-                            display: block;
-                        }
-                    }
+                    // &:hover {
+                    //     .item-list {
+                    //         display: block;
+                    //     }
+                    // }
                 }
             }
         }
