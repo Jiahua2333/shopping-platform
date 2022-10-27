@@ -2,9 +2,9 @@
     <!-- 商品分类导航 -->
     <div class="type-nav">
         <div class="container">
-            <div @mouseleave="leaveIndex">
+            <div @mouseleave="leaveIndex" @mouseenter="enterIndex">
                 <h2 class="all">全部商品分类</h2>
-                <div class="sort">
+                <div class="sort" v-show="show">
                     <div class="all-sort-list2" @click.prevent="goSearch">
                         <div
                             class="item"
@@ -16,8 +16,8 @@
                                 :class="{ cur: currIndex === index }"
                             >
                                 <a
-                                    :categoryName="c1.categoryName"
-                                    :category1Id="c1.categoryId"
+                                    :data-categoryName="c1.categoryName"
+                                    :data-category1Id="c1.categoryId"
                                     href=""
                                 >
                                     {{ c1.categoryName }}</a
@@ -38,8 +38,8 @@
                                     >
                                         <dt>
                                             <a
-                                                :categoryName="c2.categoryName"
-                                                :category2Id="c2.categoryId"
+                                                :data-categoryName="c2.categoryName"
+                                                :data-category2Id="c2.categoryId"
                                                 href=""
                                             >
                                                 {{ c2.categoryName }}</a
@@ -51,10 +51,10 @@
                                                 :key="c3.categoryId"
                                             >
                                                 <a
-                                                    :categoryName="
+                                                    :data-categoryName="
                                                         c3.categoryName
                                                     "
-                                                    :category3Id="c3.categoryId"
+                                                    :data-category3Id="c3.categoryId"
                                                     href=""
                                                 >
                                                     {{ c3.categoryName }}</a
@@ -105,6 +105,15 @@ export default {
         }, 50),
         leaveIndex() {
             this.currIndex = -1;
+            if(this.$route.path !== "/home") this.show = false;
+
+        },
+        enterIndex(){
+            //直接下一行便有同样的功能？
+            // this.show = true;
+            if (this.$route.path !== "/home") {
+                this.show = true;
+            }
         },
         //路由跳转，可以用声明式方法<route-link></route-link>，但时由于此类时组件，在数量多的时候，占用内存会很大
         //goSeach可以绑定在每个item的a标签里，但是数量多的时候，会造成许多个goSeach回调函数，占用内存也比较大
@@ -116,17 +125,16 @@ export default {
          */
         goSearch(event) {
             //event.target:获取到的是出发事件的元素(div、h3、a、em、dt、dl)
-            const {categoryName, category1Id,category2Id,category3Id} = event.target.attributes;
-            // console.log(event.target.attributes);
-            // console.log(categoryName, category1Id,category2Id,category3Id);
+            const {categoryname, category1id,category2id,category3id} = event.target.dataset;
+            // console.log(categoryname, category1id,category2id,category3id);
 
             //第二个问题解决了：点击的到底是不是a标签（只要这个标签身上带有categoryname）一定是a标签
-            if(categoryName){
+            if(categoryname){
                 const location = {name:'search'};
-                const query = {categoryName:categoryName.value};
-                if(category1Id) query.category1Id = category1Id.value;
-                else if(category2Id) query.category2Id = category2Id.value;
-                else query.category3Id = category3Id.value;
+                const query = {categoryName:categoryname};
+                if(category1id) query.category1id = category1id;
+                else if(category2id) query.category2id = category2id;
+                else query.category3id = category3id;
 
                 // console.log(query);
                 location.query = query;
@@ -139,7 +147,7 @@ export default {
         ...mapState("aboutHome", ["categoryList"]),
     },
     mounted() {
-        // console.log(this.categoryList);
+        if(this.$route.path !== "/home") this.show = false;
     },
 };
 </script>
