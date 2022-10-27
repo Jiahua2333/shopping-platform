@@ -10,6 +10,8 @@ Vue.component(TypeNav.name, TypeNav);
 import router from "@/router";
 import store from "@/store";
 
+//引入MockSever.js----mock数据
+import "@/mock/mockServe";
 
 Vue.config.productionTip = false;
 

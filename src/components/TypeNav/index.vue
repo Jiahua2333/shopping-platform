@@ -109,7 +109,7 @@ export default {
 
         },
         enterIndex(){
-            //直接下一行便有同样的功能？
+            //直接下一行便有同样的?
             // this.show = true;
             if (this.$route.path !== "/home") {
                 this.show = true;

@@ -70,15 +70,14 @@ export default {
             //2. 模板字符串形式
             // this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`);
             //3. 对象
-            this.$router.push({
+
+            const location = {
                 name: "search",
                 params: {
-                    keyword:this.keyword,
+                    keyword:this.keyword || undefined
                 },
-                query:{
-                    k:this.keyword.toUpperCase(),
-                },
-            });
+            }
+            this.$router.push(location);
         },
     },
 };
