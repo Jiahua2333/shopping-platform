@@ -1,10 +1,11 @@
 //引入请求函数
-import {reqGetCategoryList, reqGetBannerList} from "@/api";
+import {reqGetCategoryList, reqGetBannerList, reqGetFloorList} from "@/api";
 
 // 首页仓库
 const state = { 
     categoryList: [],
     bannerList:[],
+    floorList:[],
 };
 // 首页actions，用户处理派发actions的地方，可用于异步语句，发送http请求
 const actions = {
@@ -23,6 +24,13 @@ const actions = {
             commit("GETBANNERLIST", result.data);
         }
     },
+    async getFloorList({commit}){
+        const result = await reqGetFloorList();
+        // console.log(result);
+        if(result.code === 200){
+            commit("GETFLOORLIST", result.data);
+        }
+    },
 };
 // 首页mutations,唯一能修改state的地方
 const mutations = {
@@ -31,6 +39,9 @@ const mutations = {
     },
     GETBANNERLIST(state, bannerList){
         state.bannerList = bannerList;
+    },
+    GETFLOORLIST(state, floorList){
+        state.floorList = floorList;
     },
 };
 // 首页计算属性

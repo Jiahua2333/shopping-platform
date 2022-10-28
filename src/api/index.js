@@ -6,4 +6,6 @@ import mockRequests from "./mockAjax";
 //三级菜单的请求地址  /api/product/getBaseCategoryList   GET    没有任何参数
 export const reqGetCategoryList = () =>  requests.get(`/product/getBaseCategoryList`);
 
+//mock 数据 banner 和 floor GET 没有参数
 export const reqGetBannerList = () => mockRequests.get("/banner");
+export const reqGetFloorList = () => mockRequests.get("/floor");

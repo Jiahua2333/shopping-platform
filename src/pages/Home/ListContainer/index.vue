@@ -6,7 +6,11 @@
                 <!--banner轮播-->
                 <div class="swiper-container" id="mySwiper" ref="cur">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" v-for="carousel in bannerList" :key="carousel.id">
+                        <div
+                            class="swiper-slide"
+                            v-for="carousel in bannerList"
+                            :key="carousel.id"
+                        >
                             <img :src="carousel.imgUrl" />
                         </div>
                     </div>
